@@ -115,6 +115,68 @@ describe('DOM assertions', function() {
     })
   })
 
+  describe('prop', function() {
+    var subject = parse('<input type="checkbox" checked />')
+
+    describe('when only property name is provided', function() {
+      it('passes when the element has the property', function() {
+        subject.should.have.prop('checked')
+      })
+
+      it('passes negated when the element does not have the property', function() {
+        subject.should.not.have.property('bar')
+      })
+
+      it('fails when the element does not have the property', function() {
+        (function() {
+          subject.should.have.prop('bar')
+        }).should.fail('expected input[type="checkbox"][checked] to have a property \'bar\'')
+      })
+
+      it('fails negated when the element has the property', function() {
+        (function() {
+          subject.should.not.have.property('checked')
+        }).should.fail('expected input[type="checkbox"][checked] not to have a property \'checked\'')
+      })
+    })
+
+    describe('when property name and value are provided', function() {
+      it('passes when the element has the property with the given value', function() {
+        subject.should.have.property('checked', true)
+      })
+
+      it('passes negated when the element does not have the property', function() {
+        subject.should.not.have.prop('bar', 'foo')
+      })
+
+      it('passes negated when the element has the property with a different value', function() {
+        subject.should.not.have.prop('name', 'bar')
+      })
+
+      it('fails when the element does not have the property', function() {
+        (function() {
+          subject.should.have.prop('bar', 'foo')
+        }).should.fail('expected input[type="checkbox"][checked] to have a property \'bar\'')
+      })
+
+      it('fails when the element has the property with a different value', function() {
+        (function() {
+          subject.should.have.property('checked', false)
+        }).should.fail('expected input[type="checkbox"][checked] to have a property \'checked\' with the value false, but the value was true')
+      })
+
+      it('fails negated when the element has the property with the given value', function() {
+        (function() {
+          subject.should.not.have.prop('checked', true)
+        }).should.fail('expected input[type="checkbox"][checked] not to have a property \'checked\' with the value true')
+      })
+    })
+
+    it('chains', function() {
+      subject.should.have.prop('checked').equal(true)
+    })
+  })
+
   describe('class', function() {
     var subject = parse('<div class="foo shazam"></div>')
 

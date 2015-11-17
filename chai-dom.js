@@ -62,9 +62,37 @@
     flag(this, 'object', actual)
   }
 
+  propAssert = function(name, val) {
+    var el = flag(this, 'object')
+    var actual = el[name]
+
+    if (!flag(this, "negate") || undefined === val) {
+      this.assert(
+        !!el[name]
+        , "expected " + elToString(el) + " to have a property #{exp}"
+        , "expected " + elToString(el) + " not to have a property #{exp}"
+        , name
+      )
+    }
+
+    if (undefined !== val) {
+      this.assert(
+        val === actual
+        , "expected " + elToString(el) + " to have a property " + utils.inspect(name) + " with the value #{exp}, but the value was #{act}"
+        , "expected " + elToString(el) + " not to have a property " + utils.inspect(name) + " with the value #{act}"
+        , val
+        , actual
+      )
+    }
+
+    flag(this, "object", actual)
+  }
+
   utils.elToString = elToString
   chai.Assertion.addMethod('attr', attrAssert)
   chai.Assertion.addMethod('attribute', attrAssert)
+  chai.Assertion.addMethod('prop', propAssert)
+  chai.Assertion.addMethod('property', propAssert)
 
   chai.Assertion.addMethod('class', function(className) {
     var el = flag(this, 'object')
